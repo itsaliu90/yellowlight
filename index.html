@@ -19,6 +19,9 @@
     <!-- Angular -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 
+    <!-- UI Bootstrap -->
+    <script type="text/javascript" src="js/lib/ui-bootstrap-tpls-0.13.1.min.js"></script>
+
     <!-- main.js -->
     <script type="text/javascript" src="main.js"></script>
 
@@ -28,8 +31,21 @@
   <body>
     <h1>WELCOME TO YELLOWLIGHT</h1>
     <div ng-controller="PullRequestController">
-    	<h2>All PRs:</h2>
-    	<p>{{allPullRequests}}</p>
+    	<div>
+    		<button type="button" class="btn btn-success" ng-click="getAllPullRequests()">Fetch Last 3000 Closed PRs</button>
+    	</div>
+    	<div>
+    		<progressbar max="max" value="dynamic"><span style="color:black; white-space:nowrap;">{{dynamic}} / {{max}}</span></progressbar>
+    	</div>
+    	<h2>PRs:</h2>
+    	<div ng-repeat="pullRequest in allPullRequests">
+    		<ul>
+    			<li>PR Number: {{pullRequest.number}}</li>
+    			<li>Title: {{pullRequest.title}}</li>
+    			<li>User: {{pullRequest.user.login}}</li>
+    			<li>Created At: {{pullRequest.created_at}}</li>
+    		</ul>
+    	</div>
     </div>
   </body>
 </html>
