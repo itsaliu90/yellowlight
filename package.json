@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "main": "index.html",
   "dependencies": {
-    "github": "^0.2.4"
+    "github": "^0.2.4",
+    "underscore": "^1.8.3"
   }
 }

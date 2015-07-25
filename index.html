@@ -27,6 +27,13 @@
 
     <!-- app.js -->
     <script type="text/javascript" src="js/app.js"></script>
+
+    <!-- services -->
+    <script type="text/javascript" src="js/services/pullRequestFactory.js"></script>
+    <script type="text/javascript" src="js/services/searchFactory.js"></script>
+    <!-- controllers -->
+    <script type="text/javascript" src="js/controllers/pullRequestController.js"></script>
+
   </head>
   <body>
     <h1>WELCOME TO YELLOWLIGHT</h1>
@@ -37,8 +44,11 @@
     	<div>
     		<progressbar max="max" value="dynamic"><span style="color:black; white-space:nowrap;">{{dynamic}} / {{max}}</span></progressbar>
     	</div>
-    	<h2>PRs:</h2>
-    	<div ng-repeat="pullRequest in allPullRequests">
+    	<div>
+    		<button type="button" class="btn btn-success" ng-click="searchForFixPRs()">Search for PRs with Fixes</button>
+    	</div>
+    	<h2>PRs Addressing Bugs:</h2>
+    	<div ng-repeat="pullRequest in pullRequestsAddressingBugs">
     		<ul>
     			<li>PR Number: {{pullRequest.number}}</li>
     			<li>Title: {{pullRequest.title}}</li>
