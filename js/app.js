@@ -3,7 +3,7 @@ var yellowlightApp = angular.module('yellowlightApp', []);
 yellowlightApp.factory('PullRequestFactory', function($q) {
 
 	return {
-		getPullRequests: function() {
+		getPullRequests: function(page) {
 			return $q(function(resolve, reject) {
 				github.authenticate({
 				    type: "basic",
@@ -19,9 +19,8 @@ yellowlightApp.factory('PullRequestFactory', function($q) {
 				    user: "SolarCS",
 				    repo: "banff",
 				    state: "closed",
-				    page: 1
+				    page: page
 				}, function(err, res) {
-				    console.log("The number of PRs is ", res.length);
 				    resolve(res);
 				});
 			})
@@ -30,12 +29,32 @@ yellowlightApp.factory('PullRequestFactory', function($q) {
 
 });
 
-yellowlightApp.controller('PullRequestController', function($scope, PullRequestFactory) {
-	$scope.pullRequests;
-	$scope.getPullRequests = function() {
-		PullRequestFactory.getPullRequests().then(function(data) {
-			$scope.pullRequests = data;
+yellowlightApp.controller('PullRequestController', function($scope, $q, PullRequestFactory) {
+	$scope.allPullRequests = [];
+	
+	$scope.getPageOfPullRequests = function(page) {
+		return PullRequestFactory.getPullRequests(page).then(function(pageOfPullRequests) {
+			return pageOfPullRequests;
 		});
+	}
+
+	$scope.getAllPullRequests = function() {
+
+		allPromisesForPagesOfPullRequests = [];
+
+		for (var i = 0; i < 100; i++) {
+			console.log("FETCHING PAGE ", i);
+			allPromisesForPagesOfPullRequests[i] = $scope.getPageOfPullRequests(i);
+			console.log("RETURNING PROMISE ", allPromisesForPagesOfPullRequests[i]);
+		};
+
+		$q.all(allPromisesForPagesOfPullRequests).then(function(allResolvedPagesOfPullRequests) {
+			console.log("ALL PROMISES RESOLVED!", allResolvedPagesOfPullRequests);
+			for (var i = 0; i < allResolvedPagesOfPullRequests.length; i++) {
+				$scope.allPullRequests = $scope.allPullRequests.concat(allResolvedPagesOfPullRequests[i]);
+			}
+		})
 	};
-	$scope.getPullRequests();
+
+	$scope.getAllPullRequests();
 });

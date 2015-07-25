@@ -1,4 +1,5 @@
 var GitHubApi = require("github");
+var async = require("async");
 
 var github = new GitHubApi({
     // required
